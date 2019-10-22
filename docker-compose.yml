@@ -1,0 +1,18 @@
+version: "3"
+services:
+  dev:
+    tty: true
+    build:
+      context: .
+      dockerfile: ./docker-compose/dev.Dockerfile
+    volumes:
+      - ./:/usr/src/app/
+      - ./volumes/node_modules/:/usr/src/app/node_modules/
+      - ./volumes/npm_cache/:/root/.npm/_cacache/
+      - ./volumes/empty/:/usr/src/app/volumes/
+    ports:
+      - "3000:3000"
+  postgres:
+    image: postgres
+    volumes:
+      - ./volumes/postgres/:/var/lib/postgresql/data/
