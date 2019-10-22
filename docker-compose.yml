@@ -10,6 +10,8 @@ services:
       - ./volumes/node_modules/:/usr/src/app/node_modules/
       - ./volumes/npm_cache/:/root/.npm/_cacache/
       - ./volumes/empty/:/usr/src/app/volumes/
+      - ~/.ssh/:/root/.ssh/
+      - ~/.gitconfig:/root/.gitconfig
     ports:
       - "3000:3000"
   postgres:

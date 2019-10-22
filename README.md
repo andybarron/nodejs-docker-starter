@@ -49,6 +49,14 @@ From inside the development container, use **`npm run watch`** to run your
 app. It will restart automatically when you modify any code in the `src/`
 directory.
 
+### Using Git
+
+You can use Git over SSH normally from within the development container.
+Configuration files for Git and SSH (`~/.gitconfig` and `~/.ssh/`) are
+mounted into the container from the host machine. If you don't want this,
+remove those lines from the `services.dev.volumes` section of
+`docker-compose.yml`.
+
 ### Environment variables
 
 1. Fill out `.env.example` with all required variables and sample values
