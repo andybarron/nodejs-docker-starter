@@ -1,4 +1,4 @@
-version: "3"
+version: "3.7"
 services:
   dev:
     tty: true
@@ -11,7 +11,9 @@ services:
       - ./volumes/npm_cache/:/root/.npm/_cacache/
       - ./volumes/empty/:/usr/src/app/volumes/
       - ~/.ssh/:/root/.ssh/
-      - ~/.gitconfig:/root/.gitconfig
+      - type: bind
+        source: ~/.gitconfig
+        target: /root/.gitconfig
     ports:
       - "3000:3000"
   postgres:

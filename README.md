@@ -8,6 +8,8 @@ _Build a NodeJS app without spending time on toolchain setup_
 
 - [Install **Docker**](https://docs.docker.com/install/)
 - [Install **Docker Compose**](https://docs.docker.com/compose/install/)
+- Ensure you have a `.gitconfig` file in your home directory:
+  **`touch ~/.gitignore`**
 - **You _do not_ need to install NodeJS or NPM!** The development container
   will automatically install them.
 
