@@ -2,6 +2,8 @@
 
 _Build a NodeJS app without spending time on toolchain setup_
 
+[![GitHub: AndyBarron/nodejs-docker-starter][github-badge]][github-link]
+
 ## Requirements
 
 - [Install **Docker**](https://docs.docker.com/install/)
@@ -72,4 +74,6 @@ directory.
   need it, remove the `postgres` service from `docker-compose.yml`, or use it
   as a template for another database, such as MySQL or MongoDB.
 
+[github-badge]: https://img.shields.io/badge/GitHub-AndyBarron/nodejs--docker--starter-informational?logo=github&style=flat-square
+[github-link]: https://github.com/AndyBarron/nodejs-docker-starter
 [remote-containers-ext]: https://marketplace.visualstudio.com/items?itemName=ms-vscode-remote.remote-containers
