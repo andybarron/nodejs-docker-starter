@@ -8,8 +8,12 @@ _Build a NodeJS app without spending time on toolchain setup_
 
 - [Install **Docker**](https://docs.docker.com/install/)
 - [Install **Docker Compose**](https://docs.docker.com/compose/install/)
-- Ensure you have a `.gitconfig` file in your home directory:
-  **`touch ~/.gitconfig`**
+- Ensure you have necessary files and directories on your machine:
+
+```
+touch ~/.gitignore && mkdir -p ~/.ssh/
+```
+
 - **You _do not_ need to install NodeJS or NPM!** The development container
   will automatically install them.
 
@@ -27,8 +31,7 @@ _Build a NodeJS app without spending time on toolchain setup_
    **Control+~**
 6. If the terminal isn't showing a Bash prompt, open one with the
    **"+" button** next to the terminal dropdown menu
-7. From the VS Code terminal (which is now running inside the container),
-   install dependencies with **`npm install`**
+7. Develop as usual
 
 ### Without VS Code
 
@@ -40,14 +43,12 @@ it).**
 1. From the repository root directory, run **`docker-compose up -d`**
 2. Open a shell in the container with
    **`docker-compose exec dev bash`**
-3. From the new shell inside the container, install dependencies with
-   **`npm install`**
-4. When you're done, run **`docker-compose down`** (from the repository
+3. When you're done, run **`docker-compose down`** (from the repository
    root)
 
 ### Running your app
 
-From inside the development container, use **`npm run watch`** to run your
+From inside the development container, use **`yarn watch`** to run your
 app. It will restart automatically when you modify any code in the `src/`
 directory.
 
@@ -59,30 +60,17 @@ mounted into the container from the host machine. If you don't want this,
 remove those lines from the `services.dev.volumes` section of
 `docker-compose.yml`.
 
-### Environment variables
-
-1. Fill out `.env.example` with all required variables and sample values
-2. Create a new file `.env` with the values you want to use while developing
-3. Your app will automatically load the values from your `.env` file into the
-   NodeJS global `process.env` whenever your app starts or restarts from
-   changes
-
 ## Included NPM scripts
 
-- **`npm start`** - run the app
-- **`npm run watch`** - run the app in development mode, restarting on changes
-- **`npm format`** - automatically format all source files using `prettier`
+- **`yarn start`** - run the app
+- **`yarn watch`** - run the app in development mode, restarting on changes
+- **`yarn format`** - automatically format all source files using `prettier`
 
 ## Default setup notes
 
 - Port 3000 in the container is exposed to the host automatically. A
   web server (Express, etc.) listening on port 3000 will be reachable
   on the host machine at [`http://localhost:3000`](http://localhost:3000).
-- The `docker-compose.yml` file also spins up a containerized PostgreSQL
-  database for convenience. It is accessible from the development container
-  via the environment variable `POSTGRES_URI` in `.env.example`. If you don't
-  need it, remove the `postgres` service from `docker-compose.yml`, or use it
-  as a template for another database, such as MySQL or MongoDB.
 
 [github-badge]: https://img.shields.io/badge/GitHub-AndyBarron/nodejs--docker--starter-informational?logo=github&style=flat-square
 [github-link]: https://github.com/AndyBarron/nodejs-docker-starter

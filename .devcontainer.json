@@ -1,7 +1,7 @@
 {
   "dockerComposeFile": "./docker-compose.yml",
   "service": "dev",
-  "workspaceFolder": "/usr/src/app",
+  "workspaceFolder": "/app",
   "extensions": [
     "dbaeumer.vscode-eslint",
     "editorconfig.editorconfig",

@@ -1,22 +1,26 @@
 version: "3.7"
 services:
   dev:
-    tty: true
+    command: tail -f /dev/null # TODO(andy): Less hacky way to do this
     build:
       context: .
-      dockerfile: ./docker-compose/dev.Dockerfile
+      args:
+        YARN_FLAGS: ""
+        COPY_OWNER: node:node
+        DEV_TOOLS: build-base git python openssh-client bash zsh
     volumes:
-      - ./:/usr/src/app/
-      - ./volumes/node_modules/:/usr/src/app/node_modules/
-      - ./volumes/npm_cache/:/root/.npm/_cacache/
-      - ./volumes/empty/:/usr/src/app/volumes/
-      - ~/.ssh/:/root/.ssh/
+      - ./:/app/
+      - node_modules:/app/node_modules/
+      - yarn_cache:/home/node/.cache/yarn/
       - type: bind
         source: ~/.gitconfig
-        target: /root/.gitconfig
+        target: /home/node/.gitconfig
+      - type: bind
+        source: ~/.ssh/
+        target: /home/node/.ssh/
+        read_only: true
     ports:
       - "3000:3000"
-  postgres:
-    image: postgres
-    volumes:
-      - ./volumes/postgres/:/var/lib/postgresql/data/
+volumes:
+  node_modules:
+  yarn_cache:

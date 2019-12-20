@@ -1,5 +1,7 @@
 {
-  "eslint.autoFixOnSave": false,
-  "editor.formatOnSave": true,
-  "prettier.requireConfig": true
+  "editor.codeActionsOnSave": {
+    "source.fixAll": true,
+    "source.organizeImports": true
+  },
+  "editor.formatOnSave": true
 }
