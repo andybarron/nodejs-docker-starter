@@ -25,7 +25,7 @@ RUN echo COPY_OWNER = $COPY_OWNER
 ARG YARN_FLAGS="--production --frozen-lockfile"
 RUN echo YARN_FLAGS = $YARN_FLAGS
 
-# Install NPM dependencies
+# Install app dependencies
 COPY --chown=$COPY_OWNER package.json yarn.lock /app/
 RUN yarn $YARN_FLAGS
 

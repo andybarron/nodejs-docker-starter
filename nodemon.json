@@ -1,5 +1,5 @@
 {
   "watch": ["src/"],
   "ext": "*",
-  "exec": "npm start"
+  "exec": "yarn start"
 }
