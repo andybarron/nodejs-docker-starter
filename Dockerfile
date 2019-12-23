@@ -1,5 +1,5 @@
-ARG NODE_VERSION=12
-ARG YARN_VERSION=1.19
+ARG NODE_VERSION=12.14
+ARG YARN_VERSION=1.21
 
 # Build stage
 FROM node:$NODE_VERSION-alpine as builder
@@ -43,9 +43,10 @@ ARG DEV_TOOLS=
 RUN echo DEV_TOOLS = $DEV_TOOLS
 
 # Potentially install some dev tools for local development
-RUN [[ -n "$DEV_TOOLS" ]] && apk update && apk add $DEV_TOOLS \
-  && echo "Installed dev tools: $DEV_TOOLS" \
-  || echo "No dev tools specified"
+RUN if [[ -n "$DEV_TOOLS" ]]; \
+  then apk update && apk add $DEV_TOOLS \
+  && echo "Installed dev tools: $DEV_TOOLS"; \
+  else echo "No dev tools specified"; fi
 
 # Copy app
 USER node
