@@ -14,7 +14,7 @@ _Build a NodeJS app without spending time on toolchain setup_
 touch ~/.gitignore && mkdir -p ~/.ssh/
 ```
 
-- **You _do not_ need to install NodeJS, NPM or yarn!** The development container
+- **You _do not_ need to install NodeJS, NPM, or yarn!** The development container
   will automatically install them.
 
 ## Getting started
