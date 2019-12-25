@@ -1,59 +1,52 @@
-ARG NODE_VERSION=12.14
-ARG YARN_VERSION=1.21
+ARG NODE_VERSION="12.14"
+ARG YARN_VERSION="1.21"
 
-# Build stage
-FROM node:$NODE_VERSION-alpine as builder
+### Shared base stage
+FROM node:${NODE_VERSION}-slim as base
 
-# Install correct Yarn version
-RUN npm install --global --force yarn@$YARN_VERSION
+# Configurable args
+ARG DEV_MODE="false"
 
-# Set up build tooling
-RUN apk update && apk add build-base git python
+# Shared internal config
+ENV DEV_MODE="${DEV_MODE}"
+ENV INSTALL_DEV_TOOLS="apt-get update -y && apt-get install -y build-essential git python"
+
+# If in dev mode, install the build tools in the shared base image
+RUN if [ "${DEV_MODE}" = "true" ]; then eval "${INSTALL_DEV_TOOLS}"; fi
+
+# Install Yarn
+RUN npm install --global --force yarn@${YARN_VERSION}
+
+### Build stage
+FROM base as builder
+
+# If not in dev mode, install the build tools in the build stage only
+RUN if [ "${DEV_MODE}" != "true" ]; then eval "${INSTALL_DEV_TOOLS}"; fi
 
 # Set up working dir and perms
-RUN mkdir -p /app && chown -R node: /app
+RUN mkdir /app && chown node:node /app
 WORKDIR /app
 
-# Don't need root any more!
+# Don't need root any more
 USER node
-
-# development: "node:node"
-ARG COPY_OWNER=root
-RUN echo COPY_OWNER = $COPY_OWNER
-
-# development: ""
-ARG YARN_FLAGS="--production --frozen-lockfile"
-RUN echo YARN_FLAGS = $YARN_FLAGS
 
 # Install app dependencies
-COPY --chown=$COPY_OWNER package.json yarn.lock /app/
-RUN yarn $YARN_FLAGS
+COPY --chown=node package.json yarn.lock /app/
+RUN YARN_FLAGS=$([ "${DEV_MODE}" = "true" ] && echo "--production --frozen-lockfile" || echo "")
+RUN yarn ${YARN_FLAGS}
 
-# Build app
-COPY --chown=$COPY_OWNER . /app/
+# Copy source code
+COPY --chown=node . /app/
 
-# Run stage
-FROM node:$NODE_VERSION-alpine as runtime
-
-# Install correct Yarn version (again)
-RUN npm install --global --force yarn@$YARN_VERSION
-
-# development: "build-base git python openssh-client bash zsh"
-ARG DEV_TOOLS=
-RUN echo DEV_TOOLS = $DEV_TOOLS
-
-# Potentially install some dev tools for local development
-RUN if [[ -n "$DEV_TOOLS" ]]; \
-  then apk update && apk add $DEV_TOOLS \
-  && echo "Installed dev tools: $DEV_TOOLS"; \
-  else echo "No dev tools specified"; fi
-
-# Copy app
+### Run stage
+FROM base as runtime
 USER node
-COPY --from=builder /app /app
 
 # Enable Yarn cache volume for local development
 RUN mkdir -p /home/node/.cache/yarn
+
+# Copy app
+COPY --from=builder /app /app
 
 WORKDIR /app
 CMD yarn start
