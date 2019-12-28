@@ -32,8 +32,7 @@ USER node
 
 # Install app dependencies
 COPY --chown=node package.json yarn.lock /app/
-RUN YARN_FLAGS=$([ "${DEV_MODE}" = "true" ] && echo "--production --frozen-lockfile" || echo "")
-RUN yarn ${YARN_FLAGS}
+RUN if [ "${DEV_MODE}" != "true" ]; then yarn --frozen-lockfile; else yarn; fi
 
 # Copy source code
 COPY --chown=node . /app/
