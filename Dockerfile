@@ -9,10 +9,18 @@ ARG DEV_MODE="false"
 
 # Shared internal config
 ENV DEV_MODE="${DEV_MODE}"
-ENV INSTALL_DEV_TOOLS="apt-get update -y && apt-get install -y build-essential git python"
+ENV DEV_TOOLS="build-essential git python"
+ENV INSTALL_DEV_TOOLS="apt-get install -y ${DEV_TOOLS}"
+
+# Fix some apt-get installs (e.g. postgres) failing on Debian slim images:
+# https://github.com/debuerreotype/debuerreotype/issues/10#issuecomment-450480318
+RUN for i in $(seq 1 8); do mkdir -p "/usr/share/man/man${i}"; done
+
+# Update packages
+RUN apt-get update -y
 
 # If in dev mode, install the build tools in the shared base image
-RUN if [ "${DEV_MODE}" = "true" ]; then eval "${INSTALL_DEV_TOOLS}"; fi
+RUN if [ "${DEV_MODE}" = "true" ]; then ${INSTALL_DEV_TOOLS}; fi
 
 # Install Yarn
 RUN npm install --global --force yarn@${YARN_VERSION}
@@ -21,7 +29,7 @@ RUN npm install --global --force yarn@${YARN_VERSION}
 FROM base as builder
 
 # If not in dev mode, install the build tools in the build stage only
-RUN if [ "${DEV_MODE}" != "true" ]; then eval "${INSTALL_DEV_TOOLS}"; fi
+RUN if [ "${DEV_MODE}" != "true" ]; then ${INSTALL_DEV_TOOLS}; fi
 
 # Set up working dir and perms
 RUN mkdir /app && chown node:node /app
