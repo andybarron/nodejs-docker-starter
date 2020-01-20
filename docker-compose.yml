@@ -5,7 +5,10 @@ services:
     build:
       context: .
       args:
-        DEV_MODE: "true"
+        NODE_ENV: "development"
+        NPM_TOKEN: # Inherit from host env for builder stage
+    environment:
+      NPM_TOKEN: # Inherit from host env for runtime stage
     volumes:
       - ./:/app/
       - node_modules:/app/node_modules/
