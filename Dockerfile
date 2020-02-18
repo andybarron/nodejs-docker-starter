@@ -47,7 +47,7 @@ WORKDIR /app
 USER node
 
 # Install app dependencies
-COPY --chown=node package.json yarn.lock .npmrc /app/
+COPY --chown=node package.json yarn.lock /app/
 RUN echo '//registry.npmjs.org/:_authToken=${NPM_TOKEN}' > /app/.npmrc
 RUN if [ "${NODE_ENV}" = "production" ]; then yarn --frozen-lockfile --production; else yarn; fi
 
